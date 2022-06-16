@@ -4,8 +4,7 @@
 /target
 /pkg
 
-/gateway
-/vlsm-application
+yarn.lock
 
 # Logs
 logs
