@@ -1,0 +1,19 @@
+[package]
+name = "subnetting-wasm"
+version = "0.1.0"
+edition = "2021"
+authors = ["lnJoy <lnjoy3306@gmail.com>"]
+description = "Easy VLSM Subnetting Calculator"
+license = "MIT/Apache-2.0"
+repository = "https://github.com/yourgithubusername/hello-wasm"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.2"
