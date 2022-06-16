@@ -16,7 +16,7 @@ export class VLSMService {
         });
       }
 
-      return wasm.vlsm_calculate(networkInfo.ipv4, subnets);
+      return wasm.vlsm_calculate(networkInfo.network_id, subnets);
     } catch (e) {
       return null;
     }

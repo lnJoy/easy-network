@@ -4,7 +4,7 @@ import { Subnet } from '../models/subnet.model';
 
 export class CreateSubnetDto {
   @IsString()
-  readonly ipv4: string;
+  readonly network_id: string;
 
   @IsArray()
   readonly subnets: Subnet[];
