@@ -7,14 +7,18 @@ import { Subnet } from "./models/subnet.model";
 @Injectable()
 export class VLSMService {
   compute(networkInfo: CreateSubnetDto): VLSM[] {
-    const subnets: Subnet[] = [];
-    for (const subnet of networkInfo.subnets) {
-      subnets.push({
-        name: subnet.name,
-        needed_size: subnet.needed_size,
-      });
-    }
+    try {
+      const subnets: Subnet[] = [];
+      for (const subnet of networkInfo.subnets) {
+        subnets.push({
+          name: subnet.name,
+          needed_size: subnet.needed_size,
+        });
+      }
 
-    return wasm.vlsm_calculate(networkInfo.ipv4, subnets);
+      return wasm.vlsm_calculate(networkInfo.ipv4, subnets);
+    } catch (e) {
+      return null;
+    }
   }
 }
