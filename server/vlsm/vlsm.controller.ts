@@ -9,9 +9,10 @@ export class VLSMController {
 
   @Post()
   @HttpCode(200)
-  async create(@Body() createSubnetDto: CreateSubnetDto): Promise<VLSM[]> {
+  compute(@Body() createSubnetDto: CreateSubnetDto) {
     const vlsm_result: VLSM[] | undefined = this.vlsmService.compute(createSubnetDto);
     if (vlsm_result === null) throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
-    return vlsm_result;
+
+    return { data: vlsm_result, message: 'VLSM subnetting' };
   }
 }
