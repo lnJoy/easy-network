@@ -9,16 +9,16 @@ export class SubnetController {
 
   @Post('vlsm')
   @HttpCode(200)
-  compute(@Body() createSubnetDto: CreateSubnetDto) {
-    const vlsm_result: ResultSubnet | null = this.subnetService.compute(createSubnetDto);
+  vlsmCompute(@Body() createSubnetDto: CreateSubnetDto) {
+    const vlsm_result: ResultSubnet | null = this.subnetService.vlsmCompute(createSubnetDto);
     if (vlsm_result === null) throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 
     return { data: vlsm_result, message: 'VLSM subnetting' };
   }
 
   @Get('vlsm')
-  create() {
-    const vlsm_result: ResultSubnet | null = this.subnetService.create();
+  vlsmCreate() {
+    const vlsm_result: ResultSubnet | null = this.subnetService.vlsmCreate();
     if (vlsm_result === null) throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 
     return { data: vlsm_result, message: 'Random VLSM subnetting' };

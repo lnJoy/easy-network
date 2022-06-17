@@ -40,13 +40,13 @@ describe('SubnetController', () => {
         },
         "message": "VLSM subnetting"
       }
-      expect(subnetController.compute(requestDto)).toMatchObject(responseData);
+      expect(subnetController.vlsmCompute(requestDto)).toMatchObject(responseData);
     });
   });
 
   describe('[GET] /subnet/vlsm', () => {
     it('should return "OK"', () => {
-      expect(subnetController.create()).toBeInstanceOf(Object);
+      expect(subnetController.vlsmCreate()).toBeInstanceOf(Object);
     });
   });
 });

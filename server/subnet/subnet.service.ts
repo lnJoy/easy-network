@@ -5,7 +5,7 @@ import { ResultSubnet, Subnet } from "./models/subnet.model";
 
 @Injectable()
 export class SubnetService {
-  compute(networkInfo: CreateSubnetDto): ResultSubnet {
+  vlsmCompute(networkInfo: CreateSubnetDto): ResultSubnet {
     try {
       const subnets: Subnet[] = [];
       for (const subnet of networkInfo.subnets) {
@@ -21,7 +21,7 @@ export class SubnetService {
     }
   }
   
-  create(): ResultSubnet {
+  vlsmCreate(): ResultSubnet {
     try {
       return wasm.random_vlsm_calculate();
     } catch (e) {
