@@ -1,4 +1,4 @@
-import { vlsm_calculate } from '../pkg/subnetting_wasm.js';
+import { vlsm_calculate, random_vlsm_calculate } from '../pkg/subnetting_wasm.js';
 
 const vlsm = vlsm_calculate("53.0.0.0/8", [
   {
@@ -30,5 +30,7 @@ const vlsm = vlsm_calculate("53.0.0.0/8", [
     needed_size: 64,
   }
 ]);
-
 console.log(vlsm);
+
+const rvlsm = random_vlsm_calculate();
+console.log(rvlsm);
