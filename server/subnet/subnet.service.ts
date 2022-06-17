@@ -5,7 +5,7 @@ import * as wasm from '../../pkg/subnetting_wasm';
 import { Subnet } from "./models/subnet.model";
 
 @Injectable()
-export class VLSMService {
+export class SubnetService {
   compute(networkInfo: CreateSubnetDto): VLSM[] {
     try {
       const subnets: Subnet[] = [];

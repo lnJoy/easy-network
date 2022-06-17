@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateSubnetDto } from './dto/create-subnet.dto';
-import { VLSMController } from './vlsm.controller';
-import { VLSMService } from './vlsm.service';
+import { SubnetController } from './subnet.controller';
+import { SubnetService } from './subnet.service';
 
-describe('VLSMController', () => {
-  let vlsmController: VLSMController;
+describe('SubnetController', () => {
+  let subnetController: SubnetController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [VLSMController],
-      providers: [VLSMService],
+      controllers: [SubnetController],
+      providers: [SubnetService],
     }).compile();
 
-    vlsmController = app.get<VLSMController>(VLSMController);
+    subnetController = app.get<SubnetController>(SubnetController);
   });
 
-  describe('root', () => {
+  describe('[POST] /subnet/vlsm', () => {
     it('should return "OK"', () => {
       const requestDto: CreateSubnetDto = {
         network_id: '192.168.0.0/24',
@@ -37,7 +37,7 @@ describe('VLSMController', () => {
             }],
         "message": "VLSM subnetting"
       }
-      expect(vlsmController.compute(requestDto)).toMatchObject(responseData);
+      expect(subnetController.compute(requestDto)).toMatchObject(responseData);
     });
   });
 });
