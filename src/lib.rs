@@ -1,15 +1,14 @@
+use rand::{distributions::Uniform, Rng};
 use wasm_bindgen::prelude::*;
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug)]
-#[wasm_bindgen]
 pub struct Subnet {
     name: String,
     needed_size: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[wasm_bindgen]
 pub struct VLSM {
     name: String,
     needed_size: u32,
@@ -19,6 +18,12 @@ pub struct VLSM {
     subnet_mask: String,
     range: String,
     broadcast: String
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ResultSubnet {
+    network_id: String,
+    subnets: Vec<VLSM>
 }
 
 pub fn convert_prefix_to_mask(prefix: u8) -> Vec<u8> {
@@ -62,7 +67,7 @@ pub fn get_network_id(binary_ip: u64, prefix: u8) -> u64 {
 
 // https://recordsoflife.tistory.com/694
 pub fn get_allocated_size_and_prefix(current_prefix: u8, needed_size: u32) -> (u8, u32) {
-    let power: u8 = ((needed_size + 2u32) as f32 + 1.).log2().ceil() as u8;
+    let power: u8 = ((needed_size) as f32 + 1.).log2().ceil() as u8;
     
     let prefix: u8 = ((32u8 - current_prefix) - power) + current_prefix;
     let allocated_size: u32 = 2u32.pow(power as u32);
@@ -89,8 +94,38 @@ pub fn sort(subnets: &mut Vec<Subnet>) {
 pub fn vlsm_calculate(network_id: &JsValue, value: &JsValue) -> JsValue {
     let ipv4: String = network_id.into_serde().unwrap();
     let subnets: Vec<Subnet> = value.into_serde().unwrap();
-    let result = vlsm(ipv4, subnets);
-    
+    let result = ResultSubnet {
+        network_id: ipv4.clone(),
+        subnets: vlsm(ipv4, subnets)
+    };
+    JsValue::from_serde(&result).unwrap()
+}
+
+#[wasm_bindgen]
+pub fn random_vlsm_calculate() -> JsValue {
+    let rand_prefix: u8 = rand::thread_rng().gen_range(4..30);
+    let hosts_available = 2u32.pow((32u8 - rand_prefix) as u32) - 2u32;
+    let rand_octet: Vec<u8> = rand::thread_rng().sample_iter(Uniform::from(1..223)).take(4).collect();
+    let rand_ipv4: String = format!("{}.{}.{}.{}/{}", rand_octet[0], rand_octet[1], rand_octet[2], rand_octet[3], rand_prefix);
+    let mut subnets: Vec<Subnet> = vec![];
+    let mut max_size: u32 = 0;
+    for idx in 0..rand_prefix {
+        let needed_size: u32 = rand::thread_rng().gen_range(1..(hosts_available / 2));
+        max_size += needed_size;
+        subnets.push(Subnet {
+            name: String::from((65u8 + idx) as char),
+            needed_size,
+        });
+        if max_size > hosts_available as u32 {
+            subnets.pop();
+            break;
+        }
+    }
+
+    let result = ResultSubnet {
+        network_id: rand_ipv4.clone(),
+        subnets: vlsm(rand_ipv4, subnets)
+    };
     JsValue::from_serde(&result).unwrap()
 }
 
