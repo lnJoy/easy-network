@@ -1,12 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { CreateSubnetDto } from "./dto/create-subnet.dto";
-import { VLSM } from "./models/vlsm.model";
 import * as wasm from '../../pkg/subnetting_wasm';
-import { Subnet } from "./models/subnet.model";
+import { ResultSubnet, Subnet } from "./models/subnet.model";
 
 @Injectable()
 export class SubnetService {
-  compute(networkInfo: CreateSubnetDto): VLSM[] {
+  compute(networkInfo: CreateSubnetDto): ResultSubnet {
     try {
       const subnets: Subnet[] = [];
       for (const subnet of networkInfo.subnets) {
@@ -17,6 +16,14 @@ export class SubnetService {
       }
 
       return wasm.vlsm_calculate(networkInfo.network_id, subnets);
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  create(): ResultSubnet {
+    try {
+      return wasm.random_vlsm_calculate();
     } catch (e) {
       return null;
     }
